@@ -19,9 +19,6 @@
         "description": "Subnet prefix"
       }
     },
-    //"webapp": {
-    //  "type": "string"
-    //},
     "applicationGatewaySize": {
       "type": "string",
       "allowedValues": [
@@ -141,9 +138,7 @@
               "addressPrefix": "[parameters('subnetPrefix')]"
             }
 
-            //"dependsOn": [
-            //  "[concat('Microsoft.Network/networkSecurityGroups/', parameters('PubNSGName'))]"
-            //]
+         
 
           }
         ]
@@ -197,15 +192,7 @@
         "backendAddressPools": [
           {
             "name": "appGatewayBackendPool"
-            //,
-            // "properties": {
-            // "BackendAddresses": [
-            // {
-            // "fqdn": "[concat(parameters('webapp'),'.azurewebsites.net')]"
-            //}
-            //]
-            //  }
-
+           
           }
         ],
         "backendHttpSettingsCollection": [
