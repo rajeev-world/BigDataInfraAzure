@@ -25,9 +25,7 @@
         "description": "Subnet prefix"
       }
     },
-    //"webapp": {
-    //  "type": "string"
-    //},
+   
     "applicationGatewaySize": {
       "type": "string",
       "allowedValues": [
@@ -251,14 +249,7 @@
         "backendAddressPools": [
           {
             "name": "appGatewayBackendPool"
-            //,
-            // "properties": {
-            // "BackendAddresses": [
-            // {
-            // "fqdn": "[concat(parameters('webapp'),'.azurewebsites.net')]"
-            //}
-            //]
-            //  }
+            
 
           }
         ],
