@@ -1,4 +1,4 @@
-Configuration MyWebServerCfg {
+Configuration MyWebServerCfg2 {
  
     Import-DscResource -ModuleName PsDesiredStateConfiguration
  
