@@ -1,0 +1,179 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "VNet1",
+      "metadata": {
+        "description": "VNet name"
+      }
+    },
+    "vnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16",
+      "metadata": {
+        "description": "Address prefix"
+      }
+    },
+    "subnet1Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24",
+      "metadata": {
+        "description": "Subnet 1 Prefix"
+      }
+    },
+    "subnet1Name": {
+      "type": "string",
+      "defaultValue": "Subnet1",
+      "metadata": {
+        "description": "Subnet 1 Name"
+      }
+    },
+    "subnet2Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24",
+      "metadata": {
+        "description": "Subnet 2 Prefix"
+      }
+    },
+    "subnet2Name": {
+      "type": "string",
+      "defaultValue": "Subnet2",
+      "metadata": {
+        "description": "Subnet 2 Name"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "babapubip",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2018-08-01",
+      "location": "[resourcegroup().location]"
+    },    
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "babanic",
+      "apiVersion": "2018-10-01",
+      "location": "[resourcegroup().location]",
+      "dependsOn": [
+        "Microsoft.Network/virtualNetworks/babavnet",
+        "Microsoft.Network/publicIPAddresses/babapubip"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "babaipconfig",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'babapubip')]"
+              },
+              "subnet": {
+                "id":"[concat(resourceId('Microsoft.Network/virtualNetworks', 'babavnet'), '/subnets/babasubnet')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "babavnet",
+      "apiVersion": "2018-10-01",
+      "location": "[resourcegroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "babasubnet",
+            "properties": {
+              "addressPrefix": "10.0.1.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "vm1",
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2018-10-01",
+      "location": "[resourcegroup().location]",
+      "dependsOn": [
+        "Microsoft.Network/networkInterfaces/babanic"
+      ],       
+         "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_A1"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2012-R2-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            }
+          }
+        },
+        "osProfile": {
+          "computerName": "babamachine",
+          "adminUsername": "babauser",
+          "adminPassword": "baba@password123"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces','babanic')]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "babaPSIIS2",
+          "type": "extensions",
+          "apiVersion": "2018-10-01",
+          "location": "[resourcegroup().location]",
+          "dependsOn": [
+            "Microsoft.Compute/virtualMachines/vm1"
+          ], 
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "configuration": {
+                "url": "https://raw.githubusercontent.com/rajeev-world/BigDataInfraAzure/master/rajeev/ProvisionDC.zip",
+                "script": "ProvisionDC.ps1",
+                "function": "MyWebServerCfg"
+            }
+            }
+          }  
+        }
+      ]
+    } 
+
+  ]
+
+}
