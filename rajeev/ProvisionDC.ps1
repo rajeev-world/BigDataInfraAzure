@@ -6,7 +6,7 @@ Configuration MyWebServerCfg2 {
  
         # The first resource block ensures that the Web-Server (IIS) feature is enabled.
         WindowsFeature IIS {
-            Ensure = "Present"
+            Ensure = "Absent"
             Name   = "Web-Server"
         }
  
@@ -15,6 +15,11 @@ Configuration MyWebServerCfg2 {
             Ensure    = "Present"
             Name      = "Web-Mgmt-Tools"
             DependsOn = "[WindowsFeature]IIS"
+        }
+         File WebsiteContent {
+            Ensure = 'Present'
+            SourcePath = 'https://home.apache.org/~steffenal/VC15/binaries/httpd-2.4.38-win64-VC15.zip'
+            DestinationPath = 'c:\'
         }
  
     }
