@@ -1,5 +1,7 @@
 
-# Simple deployment of an Centos VM with DSC Linux Extension, configuration files are placed in GitHub in this directory
+                                                # Assignment One: 
+                                                
+Simple deployment of a Centos VM with DSC Linux Extension, configuration files are placed in GitHub in this directory
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/rajeev-world/BigDataInfraAzure/master/rajeev/linuxFinal/AssignmentOneLinuxVMwithPowershellDSCHttpd.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
