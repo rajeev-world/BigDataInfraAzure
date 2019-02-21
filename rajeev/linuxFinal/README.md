@@ -3,7 +3,7 @@
                                                 
 Simple deployment of a Centos VM with DSC Linux Extension, configuration files are placed in GitHub in this directory
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/http://raw.githubusercontent.com/rajeev-world/BigDataInfraAzure/master/rajeev/linuxFinal/azuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Frajeev-world%2FBigDataInfraAzure%2Fmaster%2Frajeev%2FlinuxFinal%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 <a href="http://armviz.io/#/?load=https://raw.githubusercontent.com/rajeev-world/BigDataInfraAzure/master/rajeev/linuxFinal/azuredeploy.json" target="_blank">
