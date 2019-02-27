@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "botEnv": {
+            "value": "prod"
+        },
+        "botId": {
+            "value": "myglobantbot"
+        },
+        "location": {
+            "value": "Central US"
+        },
+        "sku": {
+            "value": "F0"
+        },
+        "kind": {
+            "value": "sdk"
+        },
+        "siteName": {
+            "value": "myglobantbot"
+        },
+        "createNewStorage": {
+            "value": true
+        },
+        "storageAccountName": {
+            "value": "myglobantbot8066"
+        },
+        "storageAccountResourceId": {
+            "value": ""
+        },
+        "appId": {
+            "value": "b5a3f6c1-598f-4214-985d-0612e29e01af"
+        },
+        "appSecret": {
+            "value": "6fH_dbgf!.OA&&z;V[HJf(f5h/tvt"
+        },
+        "azureWebJobsBotFrameworkDirectLineSecret": {
+            "value": ""
+        },
+        "zipUrl": {
+            "value": "https://bot-framework.azureedge.net/static/49673-82dbd6b2ac/bot-packages/v1.3.1/csharp-abs-webapp_qnabot_precompiled.zip"
+        },
+        "proactiveZipUrl": {
+            "value": ""
+        },
+        "useAppInsights": {
+            "value": false
+        },
+        "appInsightsLocation": {
+            "value": "East US"
+        },
+        "serverFarmId": {
+            "value": "/subscriptions/1ba97fcd-d1e3-467e-8080-8a4d504ec689/resourceGroups/babarg/providers/Microsoft.Web/serverfarms/myglobantqna"
+        },
+        "createServerFarm": {
+            "value": false
+        },
+        "serverFarmLocation": {
+            "value": "West India"
+        },
+        "serverFarmSku": {
+            "value": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            }
+        },
+        "endpoint": {
+            "value": ""
+        },
+        "luisApiLocation": {
+            "value": "Global"
+        },
+        "botFileEncryptionKey": {
+            "value": ""
+        }
+    }
+}
