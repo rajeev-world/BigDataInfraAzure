@@ -88,6 +88,18 @@
         "botFileEncryptionKey": {
             "defaultValue": "",
             "type": "String"
+        },
+        "kbid": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "endpointkey": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "hostname": {
+            "defaultValue": "",
+            "type": "String"
         }
     },
     "variables": {
@@ -225,15 +237,15 @@
                         },
                         {
                             "name": "QnAKnowledgebaseId",
-                            "value": ""
+                            "value": "[parameters('kbid')]"
                         },
                         {
                             "name": "QnAAuthKey",
-                            "value": ""
+                            "value": "[parameters('endpointkey')]"
                         },
                         {
                             "name": "QnAEndpointHostName",
-                            "value": ""
+                            "value": "[parameters('hostname')]"
                         }
                     ],
                     "cors": {
