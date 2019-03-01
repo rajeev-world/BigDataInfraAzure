@@ -6,7 +6,7 @@
             "value": "prod"
         },
         "botId": {
-            "value": "myglobantbot"
+            "value": "babaglobantbot"
         },
         "location": {
             "value": "Central US"
@@ -18,22 +18,22 @@
             "value": "sdk"
         },
         "siteName": {
-            "value": "myglobantbot"
+            "value": "babaglobantbot"
         },
         "createNewStorage": {
             "value": true
         },
         "storageAccountName": {
-            "value": "myglobantbot8066"
+            "value": "babaglobantbot8066"
         },
         "storageAccountResourceId": {
             "value": ""
         },
         "appId": {
-            "value": "b5a3f6c1-598f-4214-985d-0612e29e01af"
+            "value": "e2e43fa2-b96d-48c6-8dce-2cf8d639dc43"
         },
         "appSecret": {
-            "value": "6fH_dbgf!.OA&&z;V[HJf(f5h/tvt"
+            "value": "6fH_dbgf!.OA&&z;V[HJf(f5h/"
         },
         "azureWebJobsBotFrameworkDirectLineSecret": {
             "value": ""
