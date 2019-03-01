@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "value": "myglobantqna2"
+            "value": "babaglobantqna"
         },
         "appName": {
-            "value": "myglobantqna2"
+            "value": "babaglobantqna"
         },
         "location": {
             "value": "westus"
