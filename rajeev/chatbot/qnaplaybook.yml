@@ -1,0 +1,202 @@
+- hosts: localhost
+  vars:
+    subscription_id: 9c245ebf-c0f4-4607-8a2f-1ecec69cf3
+    client_id: 0cc98269-6c66-4f0c-bd2b-373cd52ef2
+    secret: uxoKCQd5UikTAcULB0ex/c2n71icJpdZv5w7lEPgaY
+    tenant: c160a942-c869-429f-8a96-f8c8296d57
+    resource_group_name: babarg
+    qnamaker: babaglobantqna
+    StorageAccount: babaglobantbot9082
+    kburls: ["https://www.sbi.co.in/portal/web/customer-care/faq-public-provident-fund", "https://github.com/rajeev-world/BigDataInfraAzure/raw/master/rajeev/chatbot/IDBI_PPF.pdf", "https://github.com/rajeev-world/BigDataInfraAzure/raw/master/rajeev/chatbot/ICICI_PPF.docx"]
+    botSite: babaglobantbot2
+    botname: babaglobantbot2
+    botappid: 5bc25124-c273-4f09-ae29-7e0345b529
+    botapppsecret: '(MV$]X#wJznDS40!2{TE!3V/3#vmj1M_KAluO(;:D'
+  tasks:
+    - name: Create_Azure_QNAmaker_Deploy
+      azure_rm_deployment:
+        state: present
+        subscription_id: "{{subscription_id}}"
+        client_id: "{{client_id}}"
+        secret: "{{secret}}"
+        tenant: "{{tenant}}"
+        resource_group_name: "{{resource_group_name}}"
+        deployment_name: babaglobantqnadeployment
+        location: 'West India'
+        parameters:
+          name:
+            value: "{{qnamaker}}"
+          appName:
+            value: "{{qnamaker}}"
+          location:
+            value: westus
+          location3:
+            value: westindia
+          location4:
+            value: westus        
+          sku:
+            value: F0
+          sku2:
+            value: free
+          searchHostingMode:
+            value: Default
+        template_link: 'https://raw.githubusercontent.com/rajeev-world/BigDataInfraAzure/master/rajeev/chatbot/qna-template.json'
+      register: qnadeploy
+    - debug:
+        var: qnadeploy
+    - pause:
+        seconds: 120    
+    - name: create_oauth_token
+      uri:
+        url: https://login.microsoftonline.com/{{tenant}}/oauth2/token
+        method: POST
+        body_format: form-urlencoded
+        body:
+          grant_type: client_credentials
+          client_secret: "{{secret}}"
+          client_id: "{{client_id}}"
+          resource: https://management.azure.com/
+        return_content: yes
+      register: tokenout
+    - name: Get_qnamaker_Key
+      uri:
+        url: https://management.azure.com/subscriptions/{{subscription_id}}/resourceGroups/{{resource_group_name}}/providers/Microsoft.CognitiveServices/accounts/{{qnamaker}}/listKeys?api-version=2017-04-18
+        headers:
+          Authorization: Bearer {{tokenout.json['access_token']}}
+        method: POST
+        body: {"name": "PPFQNA", "urls": ["https://www.sbi.co.in/portal/web/customer-care/faq-public-provident-fund", "https://github.com/rajeev-world/BigDataInfraAzure/raw/master/rajeev/chatbot/IDBI_PPF.pdf","https://github.com/rajeev-world/BigDataInfraAzure/raw/master/rajeev/chatbot/ICICI_PPF.docx" ]}
+        body_format: json
+        return_content: yes
+      register: qnakeyout      
+    - name: create_qnamaker_KB
+      uri:
+        url: https://westus.api.cognitive.microsoft.com/qnamaker/v4.0/knowledgebases/create
+        headers:
+          Content-Type: "application/json"
+          Ocp-Apim-Subscription-Key: "{{qnakeyout.json['key1']}}"
+        method: POST
+        body: {"name": "PPFQNA", "urls": "{{kburls}}"}
+        body_format: json
+        status_code: 202
+        return_content: yes
+      register: qnaout
+    - debug:
+        var: qnaout
+    - debug: msg="{{qnaout.json["operationId"]}}"
+    - name: check_qnamaker_KB
+      uri:
+        url: https://westus.api.cognitive.microsoft.com/qnamaker/v4.0/operations/{{qnaout.json["operationId"]}}
+        headers:
+          Ocp-Apim-Subscription-Key: "{{qnakeyout.json['key1']}}"
+        method: GET
+        return_content: yes
+      register: qnaout2
+      until: qnaout2.json.operationState == "Succeeded"
+      retries: 10
+      delay: 30
+    - debug:
+        var: qnaout2
+    - debug: msg="{{qnaout2.json["resourceLocation"]}}"
+    - name: Get_KB_Details
+      uri:
+        url: https://westus.api.cognitive.microsoft.com/qnamaker/v4.0/{{qnaout2.json["resourceLocation"]}}
+        headers:
+          Ocp-Apim-Subscription-Key: "{{qnakeyout.json['key1']}}"
+        method: GET
+        return_content: yes
+      register: qnaout3
+    - debug:
+        var: qnaout3
+    - debug: msg="{{qnaout3.json["id"]}}"
+    - debug: msg="{{qnaout3.json["hostName"]}}"
+    - name: Publish_KB_Details
+      uri:
+        url: https://westus.api.cognitive.microsoft.com/qnamaker/v4.0/{{qnaout2.json["resourceLocation"]}}
+        headers:
+          Ocp-Apim-Subscription-Key: "{{qnakeyout.json['key1']}}"
+        method: POST
+        status_code: 204
+      register: qnaout4
+    - debug:
+        var: qnaout4
+    - name: Get_Endpoint_Key
+      uri:
+        url: https://westus.api.cognitive.microsoft.com/qnamaker/v4.0/endpointkeys
+        headers:
+          Ocp-Apim-Subscription-Key: "{{qnakeyout.json['key1']}}"
+        method: GET
+      register: qnaout5
+    - debug:
+        var: qnaout5
+    - debug: msg="{{qnaout5.json["secondaryEndpointKey"]}}"
+    - debug: msg="{{qnaout5.json["primaryEndpointKey"]}}"
+    - set_fact:
+        endpointkey: "{{qnaout5.json['primaryEndpointKey']}}"
+    - set_fact:
+        kbid: "{{qnaout3.json['id']}}"
+    - set_fact:
+        hostname: "{{qnaout3.json['hostName']}}/qnamaker"
+    - debug:
+        var: kbid
+    - debug:
+        var: hostname
+    - debug:
+        var: endpointkey
+    - name: Create_Azure_Chatbot_Deploy
+      azure_rm_deployment:
+        state: present
+        subscription_id: "{{subscription_id}}"
+        client_id: "{{client_id}}"
+        secret: "{{secret}}"
+        tenant: "{{tenant}}"
+        resource_group_name: "{{resource_group_name}}"
+        deployment_name: myglobantbotdeployment2
+        location: 'West India'
+        parameters:
+          botEnv:
+            value: prod
+          botId:
+            value: "{{botname}}"
+          location:
+            value: 'Central US'
+          sku:
+            value: F0
+          kind:
+            value: sdk
+          siteName:
+            value: "{{botSite}}"
+          createNewStorage:
+            value: true
+          storageAccountName:
+            value: "{{StorageAccount}}"
+          appId:
+            value: "{{botappid}}"
+          appSecret:
+            value: "{{botapppsecret}}"
+          zipUrl:
+            value: 'https://bot-framework.azureedge.net/static/49673-82dbd6b2ac/bot-packages/v1.3.1/csharp-abs-webapp_qnabot_precompiled.zip'
+          useAppInsights:
+            value: false
+          appInsightsLocation:
+            value: 'East US'
+          serverFarmId:
+            value: '/subscriptions/{{subscription_id}}/resourceGroups/{{resource_group_name}}/providers/Microsoft.Web/serverfarms/{{qnamaker}}'
+          createServerFarm:
+            value: false
+          serverFarmLocation:
+            value: 'West India'
+          luisApiLocation:
+            value: Global
+          endpointkey:
+            value: "{{qnaout5.json['primaryEndpointKey']}}"
+          kbid:
+            value: "{{qnaout3.json['id']}}"
+          hostname:
+            value: "{{qnaout3.json['hostName']}}/qnamaker"
+          storageAccountName:
+            value: "{{StorageAccount}}"
+        template_link: 'https://raw.githubusercontent.com/rajeev-world/BigDataInfraAzure/master/rajeev/chatbot/chatbot-template.json'
+      register: azure
+    - debug:
+        var: azure
+
