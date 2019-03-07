@@ -10,7 +10,7 @@
 		c. Also declare resourcegroupname/chatbot name/qnamkername/storageaccountname/ chatbotappid/chatbotappsecret
 		d. Also upload and share urls where knowledgebase can be find for this qna chatbot. I have uploaded pdf on github                                and shared sbi portal url for knowledge base for my PPF chatbot
 		e. Template files and othe KB docs are uploaded on github at: 
-                        https://github.com/rajeev-world/BigDataInfraAzure/tree/master/rajeev/chatbot
+      		    https://github.com/rajeev-world/BigDataInfraAzure/tree/master/rajeev/chatbot
 
 	Automation Script Flow:
 		a. It created qnamker cognitive service and qnamker app from template i uplaoded on github with runtime param in                              playbook task using Ansible Azure arm module
