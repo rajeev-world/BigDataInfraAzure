@@ -1,2 +1,2 @@
 # BigDataInfraAzure
-Sample BigData Infra Automation using Azure
+Sample appp Infra Automation using Azure and Ansible
