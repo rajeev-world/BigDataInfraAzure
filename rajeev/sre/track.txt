@@ -1,0 +1,3 @@
+Date and time                Total memory    Available memory  Used memory %  CPU Usage %   
+---------------              ------------    ----------------  -------------  ----------- 
+
