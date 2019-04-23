@@ -10,7 +10,7 @@ pool:
   name: 'babaagentpool'
 
 steps:
-- script: echo Hello, TPPO! > /etc/baba2.txt
+- script: echo Hello, TPPO! > /tmp/baba2.txt
   displayName: 'Run a one-line script'
 
 - script: |
