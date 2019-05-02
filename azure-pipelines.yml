@@ -17,7 +17,7 @@ steps:
 
     echo $BUILD_BUILDNUMBER
     echo $BUILD_BUILDNUMBER >>  /tmp/baba2.txt
-    echo $BUILD_BUILDNUMBER >>  babaazureartifacts
+    echo $BUILD_BUILDNUMBER >>  $(build.artifactstagingdirectory)/babaazureartifacts
   displayName: 'Run a one-line script'
 
 - script: |
