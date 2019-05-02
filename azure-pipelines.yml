@@ -14,9 +14,10 @@ steps:
     echo Hello, TPPO! > /tmp/baba2.txt
     echo $BUILD_BUILDID
     echo $BUILD_BUILDID >>  /tmp/baba2.txt
+
     echo $BUILD_BUILDNUMBER
     echo $BUILD_BUILDNUMBER >>  /tmp/baba2.txt
-    
+    echo $BUILD_BUILDNUMBER >>  babaazureartifacts
   displayName: 'Run a one-line script'
 
 - script: |
